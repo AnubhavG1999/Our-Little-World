@@ -485,7 +485,14 @@ function startSync(){
 // ---------- signing in: just the two of you ----------
 // Paste the config from Firebase console > Project settings > Your apps. These values are safe to be public;
 // the security rules are what keep everyone else out.
-const FIREBASE={};
+const FIREBASE={
+  apiKey:"AIzaSyCvX5HjBpAu7ysF87kZIakJSRX4lwDT4sw",
+  authDomain:"our-little-world-879e5.firebaseapp.com",
+  projectId:"our-little-world-879e5",
+  storageBucket:"our-little-world-879e5.firebasestorage.app",
+  messagingSenderId:"588829887057",
+  appId:"1:588829887057:web:16246b828a0adb08e04670"
+};
 function showRole(mode,q){ $("rq").textContent=q; $("rpick").hidden=mode!=="pick"; $("gin").hidden=mode!=="signin"; $("role").classList.add("on"); }
 function local(note){         // no connection: play on this device only, like before
   try{role=localStorage.getItem("role")}catch(e){}
