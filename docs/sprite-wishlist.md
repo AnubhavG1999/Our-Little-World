@@ -2,6 +2,26 @@
 
 Pratiksha, this is everything to feed ChatGPT so the new art matches yours exactly. Do the requests in order; each one says **which reference images to attach** and **what to name the result**. Send the finished images back to Anubhav — the cutting, sizing and lining up is done on our side, so they don't need to be pixel-perfect.
 
+## What's happened so far, and what this is for
+
+**Where it started.** You made *Our Little World* as **one single HTML file**: the room picture, every sprite of the two of us and the cat, and all the code were packed inside that one file. It only worked inside Claude, and messages couldn't be shared between two phones.
+
+**What we did with it.** Anubhav put your game online so both of you can play it together from your own phones, live:
+- It now lives at **https://anubhavg1999.github.io/Our-Little-World/**. You sign in with Google, and it's locked to just your two accounts.
+- Your one file was **unpacked into separate pieces**: the room picture (`bg.webp`), each sprite as its own little image (`g_idle.png`, `kiss.png`…), and the code. **Your art itself was not changed**; the game still uses your exact pictures.
+- You each control your own character, and you see each other move, kiss, cuddle and sit in real time. Messages and Letters pop up as speech bubbles.
+- Your "coming soon" menu now works: Memories (photos and snapshots), Games, Our Map, Future Plans, Surprise Me (a jar of notes), Music (Spotify), Settings, plus a wardrobe, a plant to water together and a day counter.
+- On phones there's a close-up "game" view that follows your character.
+
+**Why we need new art now.** Your pictures were made as one finished scene, so a few things can't be done well with them:
+- **The room has its menus painted in** (the title, the left menu, the Day badge, the bottom control bar). On phones the game has to hide part of the room to keep those out of the way. Anubhav and Claude tried painting over them by hand, and it looked fake.
+- **Characters only have one picture per direction**, so walking is just a bob, not real steps.
+- **Sleeping and cuddling are pictures placed on top of the room**, so they look like stickers rather than you being *in* the bed or *on* the sofa.
+
+**How the game uses the art (why the rules below matter).** The room is a fixed background. Everything you can click (the bed, sofa, mailbox, TV, mirror) and everywhere the characters can walk is set at exact positions on it, so **the room's layout must not move**. The characters and the cat are separate images on clear (transparent) backgrounds, which the game moves around and stacks on top of the room. That's why they need **transparent backgrounds and a consistent size**.
+
+**What happens after you send them.** Anubhav passes your images to Claude, which cuts the frames, sizes them, lines them up, and checks the new room against your original before anything changes in the game. You'll see them live after that.
+
 ## How to do it
 
 1. Open **one new ChatGPT chat** and keep using it for everything (it remembers the style better within one chat).
@@ -19,6 +39,8 @@ All the reference images are in the zip Anubhav sends you, also online at `https
 **Attach:** `bg.webp`, `portrait-g.png`, `portrait-b.png`, `g_idle.png`, `b_idle.png`, `kiss.png`, `cat_sit.png`
 
 > I'm making new art for my pixel-art game "Our Little World". The attached images are the existing art: the room background (a cozy pink bedroom at night), and character sprites of me (long wavy brown hair with blonde highlights, a bindi, pink top, jeans), my boyfriend (black wavy hair, short beard, white t-shirt, black trousers, gold chain) and our grey Persian cat.
+>
+> How the game uses them: it's a small 2D game for the two of us. The room picture is a fixed background, and clickable spots and walking areas sit at exact positions on it, so the room's layout must never move. The characters and the cat are separate sprites on transparent backgrounds that the game moves around on top of the room, so they need transparent backgrounds and a consistent size. I'll ask you for a version of the room without its painted-in menus, walking animation frames, a few new poses and outfits, and some scenes painted into pieces of the room.
 >
 > Every image I ask for must match these exactly:
 > - the same chibi pixel-art style: soft shading, 1–2 px dark outlines, warm pink palette
