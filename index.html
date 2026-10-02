@@ -76,12 +76,12 @@ body{margin:0;min-height:100vh;background:var(--bg);display:flex;flex-direction:
       <button data-a="photo">Camera</button><button data-a="cat">Pet cat</button><button data-a="feedcat">Feed cat</button><button data-a="night">Day / Night</button><button data-a="chat">Messages</button>
     </div></div>
     <div class="say sel" id="sg"><img src="assets/portrait-g.png" alt="You"><div><b>♥ You</b><p></p></div></div>
-    <div class="say" id="sb"><img src="assets/portrait-b.png" alt="Him"><div><b>♥ Him</b><p></p></div></div>
+    <div class="say" id="sb"><img src="assets/portrait-b.png" alt="Anubhav"><div><b>♥ Anubhav</b><p></p></div></div>
   </div>
   <div id="fm"></div><div id="flash"></div><div class="phone" id="phg"></div><div class="phone" id="phb"></div><div id="tint"></div><div id="sky"></div><div id="bowl"><i></i></div>
   <div id="chat"><div class="tb"><button data-tab="chat" class="on">Messages</button><button data-tab="letter">Letters</button><button id="x" aria-label="Close">x</button></div>
     <div id="log"></div><div class="wr"><textarea id="tx" rows="2"></textarea><button id="send">Send</button></div></div>
-  <div id="role"><p id="rq">Who is playing on this device?</p><div id="rpick"><button data-r="g"><img src="assets/portrait-g.png" alt=""><span>Pratiksha</span></button><button data-r="b"><img src="assets/portrait-b.png" alt=""><span>Him</span></button></div><button id="gin" hidden>Sign in with Google</button></div>
+  <div id="role"><p id="rq">Who is playing on this device?</p><div id="rpick"><button data-r="g"><img src="assets/portrait-g.png" alt=""><span>Pratiksha</span></button><button data-r="b"><img src="assets/portrait-b.png" alt=""><span>Anubhav</span></button></div><button id="gin" hidden>Sign in with Google</button></div>
   <div id="toast" role="status"></div>
 </div>
 <p class="note">Rotate your phone sideways for the best view.</p>
@@ -360,7 +360,7 @@ function phoneStep(){
 }
 
 // ---------- day/night, cat food, messages, letters ----------
-const NAME={g:"Pratiksha",b:"Him"};
+const NAME={g:"Pratiksha",b:"Anubhav"};
 const BOWL={x:47,y:77};
 const W={night:true,fedAt:0,fedBy:""};
 let db=null,role=null,tab="chat";
@@ -427,7 +427,7 @@ function listen(col,kind,lim){
 
 // ---------- live: where each of you is ----------
 // pos/g and pos/b hold each character's spot; live/pair holds the kiss/hug/cuddle you're both in.
-const HERE={g:"Pratiksha is here ♥",b:"He's here ♥"};
+const HERE={g:"Pratiksha is here ♥",b:"Anubhav is here ♥"};
 const other=()=>role==="g"?"b":"g";
 const r1=v=>Math.round(v*10)/10;
 let posReady=false,posKey="",posAt=0,seenPair=null,otherSeen=0;
