@@ -37,7 +37,7 @@ function openPanel(id, arg) {
   el.querySelector("header b").textContent = typeof def.title === "function" ? def.title(arg) : def.title;
   const body = el.querySelector(".body"); body.innerHTML = "";
   def.render(body, el, arg);
-  requestAnimationFrame(() => el.classList.add("on")); document.body.classList.add("sheet");
+  void el.offsetWidth; el.classList.add("on"); document.body.classList.add("sheet");   // reflow first so the slide-in still plays
   openId = id; SFX.play("page");
 }
 function closePanels() {
@@ -130,9 +130,24 @@ function bubbleStep(t) {
     }
     const c = charTop(k), chip = CHIPS[k], up = chip && chip.classList.contains("on") ? 3.2 : 0;
     const seen = inView(c.x); s.e.style.visibility = chip.style.visibility = seen ? "" : "hidden";   // no bubbles for someone off-screen
-    if (show) { s.e.style.left = onScreenX(c.x, s.e.offsetWidth) + "%"; s.e.style.top = (c.y - 1.4 - up) + "%"; s.e.style.zIndex = 1700 + Math.round(c.y); }
-    if (chip) { chip.style.left = c.x + "%"; chip.style.top = (c.y - .8) + "%"; }
+    const lim = minTopPct(), Hs = stage.clientHeight || 1;
+    if (show) { s.e.style.left = onScreenX(c.x, s.e.offsetWidth) + "%"; s.e.style.top = Math.max(c.y - 1.4 - up, lim + s.e.offsetHeight / Hs * 100) + "%"; s.e.style.zIndex = 1700 + Math.round(c.y); }
+    if (chip) { chip.style.left = onScreenX(c.x, chip.offsetWidth) + "%"; chip.style.top = Math.max(c.y - .8, lim + chip.offsetHeight / Hs * 100) + "%"; }
   }
+}
+// the highest a thing may sit in Gamer view: just under the top bar (in % of the room)
+function minTopPct() {
+  if (!document.body.classList.contains("gamer")) return 0;
+  return (($("tday").getBoundingClientRect().bottom || 50) + 8 - cam.y) / (stage.clientHeight || 1) * 100;
+}
+// nudge a popup (like the furniture menu) back inside the screen, clear of the top bar and the controls
+function keepInView(el) {
+  const r = el.getBoundingClientRect(), g = document.body.classList.contains("gamer");
+  const top = g ? $("tday").getBoundingClientRect().bottom + 8 : 8, bottom = innerHeight - (g ? 180 : 8);
+  let dx = 0, dy = 0;
+  if (r.left < 8) dx = 8 - r.left; else if (r.right > innerWidth - 8) dx = innerWidth - 8 - r.right;
+  if (r.top < top) dy = top - r.top; else if (r.bottom > bottom) dy = Math.max(top - r.top, bottom - r.bottom);
+  if (dx || dy) { el.style.left = parseFloat(el.style.left) + dx / stage.clientWidth * 100 + "%"; el.style.top = parseFloat(el.style.top) + dy / stage.clientHeight * 100 + "%"; }
 }
 function inView(x) { if (!document.body.classList.contains("gamer")) return true; const W = stage.clientWidth || 1; return x > -cam.x / W * 100 - 2 && x < (-cam.x + cam.vw) / W * 100 + 2; }
 // keep a bubble of width px fully on screen (Gamer view crops the Room; Room view shows all of it)
@@ -177,3 +192,9 @@ $("dayb").onclick = e => { e.stopPropagation(); SFX.play("tap"); openPanel("sett
 $("hzoom").onclick = () => { SFX.play("tap"); toggleZoom(); };
 $("tday").onclick = () => openPanel("settings");
 function muteIcon() { const t = document.querySelector("#p-more [data-id=sound]"); if (t) t.replaceChildren(h("i", null, SFX.isMuted() ? "🔇" : "🔊"), SFX.isMuted() ? "Sound off" : "Sound on"); }
+
+// phones: keep Messages and panel text boxes above the on-screen keyboard
+if (window.visualViewport) {
+  const vv = visualViewport, kb = () => { const k = innerHeight - vv.height - vv.offsetTop; document.documentElement.style.setProperty("--kb", (k > 80 ? k : 0) + "px"); };
+  vv.addEventListener("resize", kb); vv.addEventListener("scroll", kb);
+}

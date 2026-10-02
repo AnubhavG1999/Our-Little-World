@@ -3,7 +3,7 @@ let signOut = null;   // set by sync.js once Firebase is up
 definePanel("settings", "Settings", body => {
   const ann = h("input", { class: "in", type: "date", value: W.anniv || "", max: todayKey() });
   const catName = h("input", { class: "in", placeholder: "e.g. Mochi", maxLength: 24, value: W.catName || "" });
-  const viewSel = h("select", { class: "in" }, [["auto", "Automatic (Gamer view on phones held upright)"], ["gamer", "Gamer view: close-up that follows you"], ["room", "Room view: the whole room"]]
+  const viewSel = h("select", { class: "in" }, [["auto", "Automatic (Gamer view on phones and on tablets held upright)"], ["gamer", "Gamer view: close-up that follows you"], ["room", "Room view: the whole room"]]
     .map(([v, t]) => h("option", { value: v, selected: VIEW === v }, t)));
   viewSel.onchange = () => { setView(viewSel.value); toast("View changed."); };
   const sound = h("input", { type: "checkbox", checked: !SFX.isMuted(), onchange: e => { SFX.setMuted(!e.target.checked); muteIcon(); SFX.play("tap"); } });

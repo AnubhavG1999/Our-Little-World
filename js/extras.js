@@ -99,9 +99,11 @@ function cityTime(k) {
   return { city: c, time: t, day: hr >= 6 && hr < 18 };
 }
 function clocks() {
-  ["g", "b"].forEach((k, i) => { const c = cityTime(k); $("clk" + (i + 1)).textContent = (c.day ? "☀ " : "☾ ") + c.city + " " + c.time; });
+  const short = $("clocks").clientWidth && $("clocks").clientWidth < 132;     // small phones: "KOL 9:12 PM"
+  ["g", "b"].forEach((k, i) => { const c = cityTime(k); $("clk" + (i + 1)).textContent = (c.day ? "☀ " : "☾ ") + (short ? c.city.slice(0, 3).toUpperCase() : c.city) + " " + c.time; });
 }
-setInterval(clocks, 20000); clocks();
+setInterval(clocks, 20000); clocks(); addEventListener("resize", clocks);
+if (document.fonts) document.fonts.ready.then(clocks);   // the pixel font changes how much room the clocks get
 
 function worldExtras() {
   lightFx(); $("moon").classList.toggle("on", !!W.night); dayBadge(); drawPlant(); checkAnniversary();

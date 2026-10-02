@@ -7,13 +7,25 @@ const cam = { x: 0, y: 0, w: 0, h: 0, vw: 0, vh: 0, snap: true };
 function isGamer() {
   if (VIEW === "gamer") return true;
   if (VIEW === "room") return false;
-  return matchMedia("(pointer:coarse)").matches && innerHeight > innerWidth;
+  // touch screens held upright, and phones held sideways (too short for Pratiksha's bottom bar)
+  return matchMedia("(pointer:coarse)").matches && (innerHeight > innerWidth || innerHeight < 560);
+}
+// iPhone Home Screen apps can report a viewport shorter than the screen (by the status bar's height), which leaves an
+// empty strip at the bottom. Measure it so the room, panels and controls can reach the real bottom (iPhone/iPad only).
+function fitScreen() {
+  let gap = 0;
+  if (navigator.standalone === true) {
+    const full = innerHeight >= innerWidth ? Math.max(screen.width, screen.height) : Math.min(screen.width, screen.height);
+    gap = full - innerHeight; if (gap < 0 || gap > 120) gap = 0;          // a keyboard or split view is not a gap
+  }
+  document.documentElement.style.setProperty("--gap", gap + "px");
 }
 function applyView() {
+  fitScreen();
   const g = isGamer(), was = document.body.classList.contains("gamer");
   document.body.classList.toggle("gamer", g);
   if (g !== was) { closePanels(); for (const k of ["g", "b"]) SB[k].until = 0; }
-  layout();
+  layout(); if (typeof clocks === "function") requestAnimationFrame(clocks);
 }
 function setView(v) { VIEW = v; try { localStorage.setItem("view", v); } catch (e) {} applyView(); }
 function toggleZoom() { zoomOut = !zoomOut; $("hzoom").textContent = zoomOut ? "⤡" : "⤢"; layout(); }

@@ -115,7 +115,7 @@ const SRC = WARD.src;
 
 definePanel("wardrobe", "Wardrobe", body => {
   const k = me(), pal = WARD.PALETTE[k], cur = WARD.OUT[k];
-  const prev = h("img", { alt: "Your outfit", style: "height:min(34vh,22cqw);image-rendering:pixelated;display:block;margin:auto" });
+  const prev = h("img", { alt: "Your outfit", style: "height:clamp(130px,30vh,240px);image-rendering:pixelated;display:block;margin:auto" });
   const draw = () => { const url = SRC(k + "_idle"); prev.src = url; };
   draw();
   const choose = (part, val) => {

@@ -141,6 +141,6 @@ definePanel("music", "Music", body => {
     h("label", { class: "row" }, h("input", { type: "checkbox", checked: ls("sp_together") !== "0", onchange: e => ls("sp_together", e.target.checked ? "1" : "0") }),
       "Let " + NAME[other2(me())] + " start songs on my Spotify"));
   else body.append(h("button", { class: "btn p", onclick: spConnect }, "Link Spotify"),
-    navigator.standalone ? h("p", { class: "muted" }, "On iPhone, link Spotify once from Safari (not the Home Screen app). After that the app picks it up.") : null);
+    ...(navigator.standalone ? [h("p", { class: "muted" }, "On iPhone, link Spotify once from Safari (not the Home Screen app). After that the app picks it up.")] : []));
   body.append(h("p", { class: "muted" }, "Playing together needs Spotify Premium for both of you and Spotify open on your phones. On phones the playlist above may only play 30-second previews; the ▶ buttons play full songs in your Spotify app."));
 });

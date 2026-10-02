@@ -212,7 +212,7 @@ function catStep(dt,t){
   const key=cat.st==="sleep"?"cat_sleep":cat.mv?"cat_"+(cat.d==="left"?"l":"r")+(Math.floor(t/140)%2+1):cat.st==="rub"?"cat_happy":"cat_sit";
   place(els.c,key,cat.x,cat.y,cat.mv?-Math.abs(Math.sin(t/110))*.18:0,0,cat.st==="sleep"?1+.03*Math.sin(t/700):1);
   cbtn.style.left=cat.x+"%";cbtn.style.top=cat.y+"%";
-  bub.style.left=cat.x+"%";bub.style.top=(cat.y-(cat.st==="sleep"?9:12))+"%";
+  bub.style.left=onScreenX(cat.x,bub.offsetWidth)+"%";bub.style.top=Math.max(cat.y-(cat.st==="sleep"?9:12),minTopPct())+"%";
   if(bubT>0) bub.style.display="block"; else if(cat.st==="sleep"){bub.textContent="z z z";bub.style.display="block";} else bub.style.display="none";
 }
 
@@ -230,7 +230,7 @@ Object.entries(FURN).forEach(([id,F])=>{
   hotspot(id,x0,y0,x1,y1,()=>{
     const m=$("fm"); m.innerHTML="";
     F.opts.forEach((o,i)=>{const c=document.createElement("button");c.textContent=o[0];c.onclick=ev=>{ev.stopPropagation();SFX.play("tap");useFurn(id,i)};m.appendChild(c);});
-    m.style.left=((x0+x1)/2/15.36)+"%"; m.style.top=((y0+y1)/2/10.24)+"%"; m.style.display="flex";
+    m.style.left=((x0+x1)/2/15.36)+"%"; m.style.top=((y0+y1)/2/10.24)+"%"; m.style.display="flex"; keepInView(m);
   });
 });
 function useFurn(id,i){
