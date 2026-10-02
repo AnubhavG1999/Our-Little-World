@@ -18,28 +18,31 @@ function applyView() {
 function setView(v) { VIEW = v; try { localStorage.setItem("view", v); } catch (e) {} applyView(); }
 function toggleZoom() { zoomOut = !zoomOut; $("hzoom").textContent = zoomOut ? "⤡" : "⤢"; layout(); }
 
-// size the Room for the screen: in Gamer view the Room fills the play area's height and the camera pans
+// What Gamer view frames out of the painting: the sidebar (left of x0) and, when the camera is near it, the
+// title (up to TITLE.y). Below y1 is Pratiksha's control bar. Zoomed out, you see her whole painting again.
+const FRAME = { x0: .136, y0: .05, y1: .836 }, TITLE = { x: .27, y: .108 };
+const GAMER_XMIN = 18.5;             // so your Character can't wander into the hidden strip
+// size the Room for the screen: in Gamer view the framed Room fills the screen's height and the camera pans
 function layout() {
   if (!document.body.classList.contains("gamer")) {
     stage.style.width = stage.style.height = stage.style.transform = ""; return;
   }
-  const v = $("view"), vw = v.clientWidth, vh = v.clientHeight;
+  const v = $("view"), vw = v.clientWidth, vh = v.clientHeight, fw = 1 - FRAME.x0, fh = FRAME.y1 - TITLE.y;
   let w, hgt;
-  if (zoomOut) { w = Math.min(vw, vh / .836 * 1.5); hgt = w / 1.5; }
-  else { hgt = vh / .836; w = hgt * 1.5; if (w < vw) { w = vw; hgt = w / 1.5; } }
+  if (zoomOut) { w = Math.min(vw, vh / FRAME.y1 * 1.5); hgt = w / 1.5; }
+  else { hgt = vh / fh; w = hgt * 1.5; if (w * fw < vw) { w = vw / fw; hgt = w / 1.5; } }
   stage.style.width = w + "px"; stage.style.height = hgt + "px";
   Object.assign(cam, { w, h: hgt, vw, vh, snap: true });
 }
 function camStep(dt) {
   if (!document.body.classList.contains("gamer") || !cam.w) return;
-  const roomH = cam.h * .836;            // the painting's bottom strip sits under Pratiksha's control bar, so it's never shown
   let tx, ty;
-  if (zoomOut) { tx = (cam.vw - cam.w) / 2; ty = (cam.vh - roomH) / 2; }
+  if (zoomOut) { tx = (cam.vw - cam.w) / 2; ty = (cam.vh - FRAME.y1 * cam.h) / 2; }
   else {
     const f = pair ? { x: pair.x, y: pair.y } : P[me()];
-    tx = cam.vw / 2 - f.x / 100 * cam.w; ty = cam.vh * .58 - f.y / 100 * cam.h;
-    tx = Math.min(0, Math.max(cam.vw - cam.w, tx));
-    ty = roomH <= cam.vh ? (cam.vh - roomH) / 2 : Math.min(0, Math.max(cam.vh - roomH, ty));
+    tx = Math.min(-FRAME.x0 * cam.w, Math.max(cam.vw - cam.w, cam.vw / 2 - f.x / 100 * cam.w));
+    const titleInView = -tx / cam.w < TITLE.x, top = -(titleInView ? TITLE.y : FRAME.y0) * cam.h;
+    ty = Math.min(top, Math.max(cam.vh - FRAME.y1 * cam.h, cam.vh * .58 - f.y / 100 * cam.h));
   }
   if (cam.snap) { cam.x = tx; cam.y = ty; cam.snap = false; }
   else { const k = 1 - Math.pow(.002, dt); cam.x += (tx - cam.x) * k; cam.y += (ty - cam.y) * k; }

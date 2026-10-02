@@ -8,6 +8,10 @@ Everything in the game is drawn from your sprites. These are the pieces that wou
 - **Transparent PNG**, feet touching the bottom edge, nothing cropped.
 - **Name them like the existing ones** in `assets/sprites/` (`g_…` for you, `b_…` for Anubhav), and send them over. They get wired in from there.
 
+## 0. The room without its labels (quick win)
+
+`bg-clean.webp`: the same room painting (same size, 1536×1024) **without** the "Our Little World" title, the left-hand menu, the Day badge and the bottom control bar, just the room continuing underneath them. On phones the game currently has to frame those painted labels out, which hides the left wall and the top of the window; with a clean painting the phone view can show the whole room. (The computer view keeps your original with the labels.)
+
 ## 1. Walking (biggest upgrade)
 
 Right now each direction is a single picture that bobs. Two or three frames per direction would make real walking:

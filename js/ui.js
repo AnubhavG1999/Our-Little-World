@@ -53,21 +53,20 @@ function rerender(id, arg) {
 }
 function goHome() { closePanels(); if (typeof zoomOut !== "undefined" && zoomOut) toggleZoom(); cam.snap = true; }
 
-// ---------- the ☰ menu and the "More" actions (Gamer view) ----------
-const MENU = [["home", "🏠", "Home"], ["chat", "💬", "Messages"], ["letter", "✉️", "Letters"], ["memories", "📸", "Memories"], ["games", "🎮", "Games"],
-  ["map", "🗺️", "Our Map"], ["plans", "✈️", "Future Plans"], ["music", "🎵", "Music"], ["jar", "🫙", "Surprise Me"], ["wardrobe", "👗", "Wardrobe"], ["settings", "⚙️", "Settings"]];
-definePanel("menu", "Our Little World", body => {
-  body.append(h("div", { class: "tiles" }, MENU.map(([id, ic, label]) => h("button", { class: "tile", onclick: () => {
-    if (id === "home") goHome(); else if (id === "chat" || id === "letter") openChat(id); else openPanel(id);
+// ---------- "More" (Gamer view): the painted sidebar's places, then things to do ----------
+// In Room view these places are the sidebar painted into the room; on phones that strip is framed out, so they live here.
+const PLACES = [["home", "🏠", "Home"], ["letter", "✉️", "Our Letters"], ["memories", "📸", "Memories"], ["games", "🎮", "Games"], ["map", "🗺️", "Our Map"],
+  ["plans", "✈️", "Future Plans"], ["music", "🎵", "Music"], ["jar", "🫙", "Surprise Me"], ["wardrobe", "👗", "Wardrobe"], ["settings", "⚙️", "Settings"]];
+const MORE = [["sit", "🪑", "Sit"], ["feed", "🍓", "Eat"], ["sleep", "🌙", "Sleep"], ["hands", "🤝", "Hold hands"], ["e", "🎁", "Surprise"], ["emote", "😊", "Emote"],
+  ["cat", "🐱", "Pet cat"], ["feedcat", "🥣", "Feed cat"], ["water", "🪴", "Water plant"], ["night", "🌗", "Day / Night"], ["lamp", "💡", "Lamp"]];
+definePanel("more", "Our Little World", body => {
+  body.append(h("h4", null, "Places"), h("div", { class: "tiles" }, PLACES.map(([id, ic, label]) => h("button", { class: "tile", onclick: () => {
+    if (id === "home") goHome(); else if (id === "letter") openChat("letter"); else openPanel(id);
   } }, h("i", null, ic), label)),
     h("button", { class: "tile", "data-id": "sound", onclick: () => { SFX.setMuted(!SFX.isMuted()); muteIcon(); SFX.play("tap"); } })));
-  muteIcon();
-});
-const MORE = [["sit", "🪑", "Sit"], ["feed", "🍓", "Eat"], ["sleep", "🌙", "Sleep"], ["hands", "🤝", "Hold hands"], ["e", "🎁", "Surprise"], ["emote", "😊", "Emote"],
-  ["cat", "🐱", "Pet cat"], ["feedcat", "🥣", "Feed cat"], ["water", "🪴", "Water plant"], ["night", "🌗", "Day / Night"], ["lamp", "💡", "Lamp"], ["wardrobe", "👗", "Wardrobe"]];
-definePanel("more", "Things to do", body => {
-  body.append(h("div", { class: "tiles" }, MORE.map(([a, ic, label]) => h("button", { class: "tile", onclick: () => { closePanels(); act(a); } }, h("i", null, ic), label))));
+  body.append(h("h4", null, "Things to do"), h("div", { class: "tiles" }, MORE.map(([a, ic, label]) => h("button", { class: "tile", onclick: () => { closePanels(); act(a); } }, h("i", null, ic), label))));
   body.append(h("p", { class: "muted" }, "Tip: tap the bed, sofa, desk, mirror, plant or lamp in the room for more."));
+  muteIcon();
 });
 
 // ---------- emotes ----------
@@ -130,9 +129,17 @@ function bubbleStep(t) {
       if (show) { void s.e.offsetWidth; s.e.className = "sb on " + (live ? s.kind : "typing"); s.e.textContent = live ? s.text : "• • •"; }
     }
     const c = charTop(k), chip = CHIPS[k], up = chip && chip.classList.contains("on") ? 3.2 : 0;
-    if (show) { s.e.style.left = c.x + "%"; s.e.style.top = (c.y - 1.4 - up) + "%"; s.e.style.zIndex = 1700 + Math.round(c.y); }
+    const seen = inView(c.x); s.e.style.visibility = chip.style.visibility = seen ? "" : "hidden";   // no bubbles for someone off-screen
+    if (show) { s.e.style.left = onScreenX(c.x, s.e.offsetWidth) + "%"; s.e.style.top = (c.y - 1.4 - up) + "%"; s.e.style.zIndex = 1700 + Math.round(c.y); }
     if (chip) { chip.style.left = c.x + "%"; chip.style.top = (c.y - .8) + "%"; }
   }
+}
+function inView(x) { if (!document.body.classList.contains("gamer")) return true; const W = stage.clientWidth || 1; return x > -cam.x / W * 100 - 2 && x < (-cam.x + cam.vw) / W * 100 + 2; }
+// keep a bubble of width px fully on screen (Gamer view crops the Room; Room view shows all of it)
+function onScreenX(x, px) {
+  const W = stage.clientWidth || 1, half = px / 2 / W * 100 + .6;
+  const lo = document.body.classList.contains("gamer") ? -cam.x / W * 100 : 0, hi = document.body.classList.contains("gamer") ? (-cam.x + cam.vw) / W * 100 : 100;
+  return Math.min(hi - half, Math.max(lo + half, x));
 }
 // "♪ now playing" chips over each Character (filled in by music.js)
 const CHIPS = {};
@@ -165,9 +172,8 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden && $(
 document.querySelectorAll('[data-a="chat"]').forEach(b => { if (!b.querySelector(".badge")) b.append(h("span", { class: "badge msg" })); });
 
 // ---------- Gamer view top bar ----------
-$("hmenu").onclick = () => { SFX.play("tap"); openPanel("menu"); };
 $("hmore").onclick = () => { SFX.play("tap"); openPanel("more"); };
 $("dayb").onclick = e => { e.stopPropagation(); SFX.play("tap"); openPanel("settings"); };
 $("hzoom").onclick = () => { SFX.play("tap"); toggleZoom(); };
 $("tday").onclick = () => openPanel("settings");
-function muteIcon() { const t = document.querySelector("#p-menu [data-id=sound]"); if (t) t.replaceChildren(h("i", null, SFX.isMuted() ? "🔇" : "🔊"), SFX.isMuted() ? "Sound off" : "Sound on"); }
+function muteIcon() { const t = document.querySelector("#p-more [data-id=sound]"); if (t) t.replaceChildren(h("i", null, SFX.isMuted() ? "🔇" : "🔊"), SFX.isMuted() ? "Sound off" : "Sound on"); }

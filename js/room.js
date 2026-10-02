@@ -45,6 +45,7 @@ function mk(){const i=document.createElement("img");i.className="spr";i.alt="";s
 let sel="g", pair=null, pairT=0, NOW=0;
 let LIVE=false;               // true once signed in: you move only your own character, the other one follows the other device
 const keys=new Set();
+const xMin=()=>document.body.classList.contains("gamer")?GAMER_XMIN:12;   // Gamer view keeps you out of the painted sidebar
 const JOY={x:0,y:0,on:false}; // the on-screen joystick in Gamer view
 
 function say(g,b){ if(g!=null) document.querySelector("#sg p").textContent=g; if(b!=null) document.querySelector("#sb p").textContent=b; sayBubbles(g,b); }
@@ -111,7 +112,7 @@ stage.addEventListener("pointerdown",e=>{
   if(!e.target.closest("#fm")) $("fm").style.display="none";
   if(e.target.closest("button,.say,#chat,#role,#fm,.sb,.chip,#plant,#frame")) return; clearHold();
   const r=stage.getBoundingClientRect(), a=P[sel];
-  a.tx=Math.min(88,Math.max(12,(e.clientX-r.left)/r.width*100));
+  a.tx=Math.min(88,Math.max(xMin(),(e.clientX-r.left)/r.width*100));
   a.ty=Math.min(80,Math.max(37,(e.clientY-r.top)/r.height*100));
   tapRing(a.tx,a.ty);
 });
@@ -139,7 +140,7 @@ function loop(t){
     else if(a.tx!=null){const ex=a.tx-a.x, ey=(a.ty-a.y)/1.5, L=Math.hypot(ex,ey); if(L<.8){a.tx=null}else{dx=ex/L;dy=ey/L}}
     if(dx||dy){
       a.mv=true; a.d=Math.abs(dx)>Math.abs(dy)?(dx<0?"left":"right"):(dy<0?"up":"down");
-      a.x=Math.min(88,Math.max(12,a.x+dx*24*dt)); a.y=Math.min(80,Math.max(37,a.y+dy*36*dt));
+      a.x=Math.min(88,Math.max(xMin(),a.x+dx*24*dt)); a.y=Math.min(80,Math.max(37,a.y+dy*36*dt));
       if(a.x>72&&a.y<46.5) a.y=46.5; if(a.x<25&&a.y>57) a.x=25;
     }
   }
