@@ -137,6 +137,7 @@ const K = 1.15;               // sprite scale vs. the sheet
 const $ = id => document.getElementById(id);
 const stage = $("stage");
 stage.style.backgroundImage = `url(${BG})`;
+Object.values(S).forEach(s=>{const i=new Image();i.src=s.src;});   // fetch every sprite up front so a pose doesn't blink in the first time it's used
 
 // ---------- editable words ----------
 const ACT = {
