@@ -45,17 +45,20 @@
 </div>
 <div id="hud">
   <div id="top">
-    <button class="ib" id="hmenu" aria-label="Menu">☰</button>
-    <button id="tday" aria-label="Day count and settings"><b id="tdayn">Day 1</b><small>Our Little World</small></button>
+    <button class="ib glass" id="hmenu" aria-label="Menu">☰</button>
+    <button class="glass" id="tday" aria-label="Day count and settings"><b id="tdayn">Day 1</b><small>Our Little World</small></button>
     <div id="clocks"><span id="clk1"></span><span id="clk2"></span></div>
-    <button class="ib" id="hmute" aria-label="Sound">🔊</button>
-    <button class="ib" id="hzoom" aria-label="Zoom out">⤢</button>
+    <button class="ib glass" data-a="chat" aria-label="Messages">💬</button>
+    <button class="ib glass" id="hzoom" aria-label="Zoom out">⤢</button>
   </div>
   <div id="bot">
     <div id="joy" aria-label="Joystick"><i></i></div>
-    <div id="hot">
-      <button data-a="kiss"><i>💋</i>Kiss</button><button data-a="hug"><i>🤗</i>Hug</button><button data-a="cuddle"><i>☁️</i>Cuddle</button>
-      <button data-a="photo"><i>📷</i>Camera</button><button data-a="chat"><i>💬</i>Messages</button><button id="hmore"><i>✨</i>More</button>
+    <div id="acts">
+      <button class="act glass" data-a="hug" style="--x:-108px;--y:0px"><i>🤗</i>Hug</button>
+      <button class="act glass" data-a="cuddle" style="--x:-93px;--y:-54px"><i>☁️</i>Cuddle</button>
+      <button class="act glass" data-a="photo" style="--x:-54px;--y:-93px"><i>📷</i>Camera</button>
+      <button class="act glass" id="hmore" style="--x:0px;--y:-108px"><i>✨</i>More</button>
+      <button class="act big" data-a="kiss"><i>💋</i>Kiss</button>
     </div>
   </div>
 </div>

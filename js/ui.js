@@ -59,7 +59,9 @@ const MENU = [["home", "🏠", "Home"], ["chat", "💬", "Messages"], ["letter",
 definePanel("menu", "Our Little World", body => {
   body.append(h("div", { class: "tiles" }, MENU.map(([id, ic, label]) => h("button", { class: "tile", onclick: () => {
     if (id === "home") goHome(); else if (id === "chat" || id === "letter") openChat(id); else openPanel(id);
-  } }, h("i", null, ic), label))));
+  } }, h("i", null, ic), label)),
+    h("button", { class: "tile", "data-id": "sound", onclick: () => { SFX.setMuted(!SFX.isMuted()); muteIcon(); SFX.play("tap"); } })));
+  muteIcon();
 });
 const MORE = [["sit", "🪑", "Sit"], ["feed", "🍓", "Eat"], ["sleep", "🌙", "Sleep"], ["hands", "🤝", "Hold hands"], ["e", "🎁", "Surprise"], ["emote", "😊", "Emote"],
   ["cat", "🐱", "Pet cat"], ["feedcat", "🥣", "Feed cat"], ["water", "🪴", "Water plant"], ["night", "🌗", "Day / Night"], ["lamp", "💡", "Lamp"], ["wardrobe", "👗", "Wardrobe"]];
@@ -166,8 +168,6 @@ document.querySelectorAll('[data-a="chat"]').forEach(b => { if (!b.querySelector
 $("hmenu").onclick = () => { SFX.play("tap"); openPanel("menu"); };
 $("hmore").onclick = () => { SFX.play("tap"); openPanel("more"); };
 $("dayb").onclick = e => { e.stopPropagation(); SFX.play("tap"); openPanel("settings"); };
-$("hmute").onclick = () => { SFX.setMuted(!SFX.isMuted()); muteIcon(); SFX.play("tap"); };
 $("hzoom").onclick = () => { SFX.play("tap"); toggleZoom(); };
 $("tday").onclick = () => openPanel("settings");
-function muteIcon() { $("hmute").textContent = SFX.isMuted() ? "🔇" : "🔊"; $("hmute").setAttribute("aria-label", SFX.isMuted() ? "Sound off" : "Sound on"); }
-muteIcon();
+function muteIcon() { const t = document.querySelector("#p-menu [data-id=sound]"); if (t) t.replaceChildren(h("i", null, SFX.isMuted() ? "🔇" : "🔊"), SFX.isMuted() ? "Sound off" : "Sound on"); }
