@@ -52,6 +52,32 @@ addEventListener("resize", applyView);
 addEventListener("orientationchange", () => setTimeout(applyView, 250));
 
 // ---------- the joystick ----------
+// drawn as pixel art (a 32px base and a 14px knob, scaled up crisp) so it sits with Pratiksha's room
+(() => {
+  const art = (n, paint) => { const c = document.createElement("canvas"); c.width = c.height = n; const x = c.getContext("2d");
+    for (let y = 0; y < n; y++) for (let X = 0; X < n; X++) { const col = paint(X + .5 - n / 2, y + .5 - n / 2, X, y); if (col) { x.fillStyle = col; x.fillRect(X, y, 1, 1); } }
+    return c.toDataURL(); };
+  const base = art(32, (dx, dy, X, y) => {
+    const r = Math.hypot(dx, dy);
+    if (r > 15.6) return null;
+    if (r > 14.4) return "#6B2440";                                                    // outline
+    if (r > 13.2) return "#F6C3D0";                                                    // pink rim
+    const arrow = (a, b) => a >= 3 && a <= 5 && Math.abs(b) <= a - 2.5;                   // little ▲ ▼ ◀ ▶ notches, tip toward the edge
+    if (arrow(y, X - 15.5) || arrow(31 - y, X - 15.5) || arrow(X, y - 15.5) || arrow(31 - X, y - 15.5)) return "#E8506F";
+    if (Math.abs(r - 8.5) < .55 && (X + y) % 2) return "rgba(239,160,181,.9)";        // dotted inner ring
+    return dy > 6 && r > 11 ? "rgba(246,195,208,.62)" : "rgba(253,239,238,.55)";
+  });
+  const knob = art(14, (dx, dy) => {
+    const r = Math.hypot(dx, dy);
+    if (r > 6.9) return null;
+    if (r > 5.9) return "#6B2440";
+    if (Math.hypot(dx + 2, dy + 2) < 1.8) return "#FFC2D3";                            // highlight
+    if (Math.hypot(dx + 1.2, dy + 1.2) < 3.2) return "#FF8FB1";
+    if (dx + dy > 4.2) return "#B23A5E";                                                // shade
+    return "#E8506F";
+  });
+  $("joy").style.backgroundImage = `url(${base})`; $("joy").querySelector("i").style.backgroundImage = `url(${knob})`;
+})();
 (() => {
   const j = $("joy"), knob = j.querySelector("i"); let id = null;
   function move(e) {

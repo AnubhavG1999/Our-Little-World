@@ -164,36 +164,41 @@ body.gamer #stage{aspect-ratio:auto;will-change:transform;transform-origin:0 0}
 body.gamer #ui{position:fixed;inset:0;z-index:30}
 body.gamer #bar,body.gamer #base,body.gamer .note{display:none}
 body.gamer #hud{display:block}
-.glass{background:rgba(253,239,238,.8);-webkit-backdrop-filter:blur(10px) saturate(1.3);backdrop-filter:blur(10px) saturate(1.3);border:1.5px solid rgba(255,255,255,.8);
-  box-shadow:0 6px 18px rgba(40,8,30,.28),inset 0 1px 0 rgba(255,255,255,.65)}
+/* 8-bit controls: flat fills, a 3px pixel outline with notched corners, a pink inner rim and a hard drop "step". No blur. */
+.glass{background:#FDEFEE;border:0;border-radius:0;
+  box-shadow:inset 0 0 0 3px #F6C3D0,0 -3px 0 0 #6B2440,0 3px 0 0 #6B2440,-3px 0 0 0 #6B2440,3px 0 0 0 #6B2440,
+    0 6px 0 0 rgba(58,14,32,.55),3px 3px 0 0 rgba(58,14,32,.55),-3px 3px 0 0 rgba(58,14,32,.55)}
+.glass:active{box-shadow:inset 0 0 0 3px #F6C3D0,0 -3px 0 0 #6B2440,0 3px 0 0 #6B2440,-3px 0 0 0 #6B2440,3px 0 0 0 #6B2440}
 #top{position:fixed;left:0;right:0;top:0;height:calc(var(--top) + 20px);padding:calc(env(safe-area-inset-top,0px) + 10px) calc(12px + env(safe-area-inset-right,0px)) 0 calc(12px + env(safe-area-inset-left,0px));
   display:flex;align-items:flex-start;gap:8px;z-index:26;pointer-events:none;background:linear-gradient(rgba(22,6,20,.5),rgba(22,6,20,0))}
 #top>*{pointer-events:auto}
-.ib{width:42px;height:42px;flex:0 0 42px;border-radius:14px;color:var(--ink);font-size:18px;display:grid;place-items:center;cursor:pointer;padding:0;position:relative;transition:transform .1s}
-.ib:active{transform:scale(.9)}
-#tday{display:flex;flex-direction:column;justify-content:center;line-height:1.05;color:var(--ink);border-radius:14px;padding:4px 12px;height:42px;white-space:nowrap;font-size:10.5px;cursor:pointer;text-align:left}
+.ib{width:40px;height:40px;flex:0 0 40px;margin:3px;color:var(--ink);font-size:18px;display:grid;place-items:center;cursor:pointer;padding:0;position:relative}
+.ib:active{transform:translateY(3px)}
+#tday{display:flex;flex-direction:column;justify-content:center;line-height:1.05;color:var(--ink);margin:3px;padding:4px 11px;height:40px;white-space:nowrap;font-size:10.5px;cursor:pointer;text-align:left}
+#tday:active{transform:translateY(3px)}
 #tday b{font-size:15px;font-weight:600}
 #tday small{display:none}
-#clocks{flex:1;min-width:0;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10.5px;color:#FFE9F0;white-space:nowrap;line-height:1.35;
-  border-radius:14px;padding:0 8px;background:rgba(30,10,26,.42);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.18)}
+#clocks{flex:1;min-width:0;height:40px;margin:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10.5px;color:#FFE9F0;white-space:nowrap;line-height:1.35;padding:0 8px;
+  background:rgba(44,14,36,.85);box-shadow:inset 0 0 0 3px rgba(255,255,255,.1),0 -3px 0 0 #2a0c1e,0 3px 0 0 #2a0c1e,-3px 0 0 0 #2a0c1e,3px 0 0 0 #2a0c1e,0 6px 0 0 rgba(20,4,14,.45)}
 #clocks span{overflow:hidden;text-overflow:ellipsis;max-width:100%}
 #bot{position:fixed;left:0;right:0;bottom:0;height:0;z-index:26;pointer-events:none}
 #bot>*{pointer-events:auto}
 body.gamer.sheet #bot{visibility:hidden}
-#joy{position:fixed;left:calc(18px + env(safe-area-inset-left,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px));width:128px;height:128px;border-radius:50%;touch-action:none;
-  background:radial-gradient(circle,rgba(255,255,255,.34) 0 36%,rgba(255,255,255,.16) 37% 69%,rgba(255,255,255,.06) 70%);border:2px solid rgba(255,255,255,.6);
-  box-shadow:0 6px 18px rgba(40,8,30,.3);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-#joy i{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9cbb,#B23A5E 72%);
-  box-shadow:0 4px 10px rgba(122,42,70,.45),inset 0 -4px 0 rgba(0,0,0,.16),inset 0 2px 0 rgba(255,255,255,.35)}
-#acts{position:fixed;right:calc(22px + env(safe-area-inset-right,0px));bottom:calc(28px + env(safe-area-inset-bottom,0px));width:80px;height:80px}
-.act{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px;border-radius:50%;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  font-size:9.5px;line-height:1;cursor:pointer;padding:0;transform:translate(var(--x,0px),var(--y,0px));transition:transform .1s}
-.act i{font-style:normal;font-size:20px;line-height:1}
-.act:active{transform:translate(var(--x,0px),var(--y,0px)) scale(.88)}
-.act.big{width:80px;height:80px;margin:-40px;font-size:11px;color:#fff;border:2px solid rgba(255,255,255,.85);
-  background:radial-gradient(circle at 35% 28%,#ff9cbb,#E8506F 45%,#B23A5E 100%);box-shadow:0 8px 22px rgba(178,58,94,.5),inset 0 2px 0 rgba(255,255,255,.4)}
+#joy{position:fixed;left:calc(18px + env(safe-area-inset-left,0px));bottom:calc(26px + env(safe-area-inset-bottom,0px));width:128px;height:128px;touch-action:none;
+  background:center/100% 100% no-repeat;image-rendering:pixelated;filter:drop-shadow(0 4px 0 rgba(58,14,32,.5))}
+#joy i{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;background:center/100% 100% no-repeat;image-rendering:pixelated}
+#acts{position:fixed;right:calc(24px + env(safe-area-inset-right,0px));bottom:calc(30px + env(safe-area-inset-bottom,0px));width:78px;height:78px}
+.act{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  font-size:9.5px;line-height:1;cursor:pointer;padding:0;transform:translate(var(--x,0px),var(--y,0px))}
+.act i{font-style:normal;font-size:19px;line-height:1}
+.act:active{transform:translate(var(--x,0px),calc(var(--y,0px) + 3px))}
+.act.big{width:78px;height:78px;margin:-39px;font-size:11px;color:#fff;border:0;border-radius:0;background:#E8506F;text-shadow:0 2px 0 #9c2f4f;
+  box-shadow:inset 0 4px 0 0 #FF9CBB,inset 0 -4px 0 0 #B23A5E,0 -3px 0 0 #6B2440,0 3px 0 0 #6B2440,-3px 0 0 0 #6B2440,3px 0 0 0 #6B2440,
+    0 7px 0 0 rgba(58,14,32,.55),3px 4px 0 0 rgba(58,14,32,.55),-3px 4px 0 0 rgba(58,14,32,.55)}
+.act.big:active{box-shadow:inset 0 4px 0 0 #FF9CBB,inset 0 -4px 0 0 #B23A5E,0 -3px 0 0 #6B2440,0 3px 0 0 #6B2440,-3px 0 0 0 #6B2440,3px 0 0 0 #6B2440}
 .act.big i{font-size:28px}
-.badge{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:var(--hot);color:#fff;font-size:11.5px;display:none;place-items:center;border:2px solid #fff;line-height:1}
+.badge{position:absolute;top:-8px;right:-8px;min-width:20px;height:20px;padding:0 5px;background:var(--hot);color:#fff;font-size:11.5px;display:none;place-items:center;line-height:1;
+  box-shadow:0 -2px 0 0 #fff,0 2px 0 0 #fff,-2px 0 0 0 #fff,2px 0 0 0 #fff}
 .badge.on{display:grid}
 body.gamer #toast{position:fixed;top:calc(var(--top) + 10px);font-size:14px;padding:9px 14px;border-width:2px;border-radius:12px;max-width:92vw;white-space:normal;text-align:center;width:max-content}
 body.gamer #flash{position:fixed}

@@ -136,10 +136,14 @@ function local(note){         // no connection: play on this device only, like b
   const auth=firebase.auth(), fs=firebase.firestore();
   signOut=()=>auth.signOut().then(()=>location.reload());
   $("gin").onclick=e=>{ e.stopPropagation();
-    auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(err=>{
-      if(!/popup-closed|cancelled-popup/.test(err.code)) toast("Sign-in didn't work. Try again.");
+    const google=new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(google).catch(err=>{
+      // some Home Screen apps (iPhone) can't open the sign-in popup: go the redirect way instead
+      if(/popup-blocked|operation-not-supported|web-storage-unsupported/.test(err.code)) return auth.signInWithRedirect(google);
+      if(!/popup-closed|cancelled-popup/.test(err.code)) toast("Sign-in didn't work. Try again, or open the game in Safari/Chrome.");
     });
   };
+  auth.getRedirectResult().catch(()=>toast("Sign-in didn't work here. Try opening the game in Safari/Chrome."));
   auth.onAuthStateChanged(async u=>{
     if(!u) return showRole("signin","Our Little World");
     if(LIVE) return;
