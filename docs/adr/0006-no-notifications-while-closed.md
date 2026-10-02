@@ -1,0 +1,3 @@
+# No phone notifications while the game is closed
+
+Sending a push notification needs a trusted server holding a private key; on Firebase that means Cloud Functions, which require the paid Blaze plan, and there is no browser-only way to send one. To stay free (ADR-0001), the game only notices things while it is open: toasts, Speech bubbles, an unread count on Messages, in the tab title and on the app icon. If this is ever missed, the cheapest fix is a tiny relay on a free serverless tier (for example Cloudflare Workers) that holds the key, plus "Add to Home Screen" on iPhone, which web push requires.
